@@ -24,4 +24,4 @@ jobs:
         run: |
           lftp -u $USERNAME,$PASSWORD sftp://$HOST -e "
           set sftp:auto-confirm yes;
-          mirror --reverse --delete --verbose ./ $DEPLOY_PATH; quit"
+          mirror --reverse --delete --verbose --exclude .git/ ./ $DEPLOY_PATH; quit"

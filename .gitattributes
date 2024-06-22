@@ -4,3 +4,5 @@
 # Make Github Linguist able to mark .yml and .yaml as YAML
 *.yaml linguist-language=YAML
 *.yml linguist-language=YAML
+*.yaml linguist-detectable=true
+*.yml linguist-detectable=true

@@ -1,4 +1,4 @@
-# ssh-dreamhost
+# SFTP-Dreamhost
 Github Action for pushing code to Dreamhost via SFTP.
 
 ## How to use

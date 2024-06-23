@@ -1,4 +1,4 @@
-name: Deploy to DreamHost via SFTP
+name: Deploy to DreamHost via sshpass
 
 on:
   push:
@@ -12,20 +12,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install lftp
-        run: sudo apt-get install lftp
+      - name: Install sshpass
+        run: sudo apt-get install -y sshpass
 
-      - name: Setup SSH
+      - name: Add SSH Key to known_hosts
+        env:
+          KNOWN_HOSTS_ENTRY: ${{ secrets.KNOWN_HOSTS_ENTRY }}
+          HOST: ${{ secrets.HOST }}
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
+          echo "$KNOWN_HOSTS_ENTRY" >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
 
-      - name: Deploy via rsync
+      - name: Deploy via rsync and sshpass
         env:
           USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
           HOST: ${{ secrets.HOST }}
           DEPLOY_PATH: subdomain.domain.tld/ # Change this to your project path
         run: |
-          rsync -avz --delete --exclude .git/ ./ $USERNAME@$HOST:$DEPLOY_PATH
+          sshpass -p "$PASSWORD" rsync -avz --delete --exclude .git/ ./ $USERNAME@$HOST:$DEPLOY_PATH

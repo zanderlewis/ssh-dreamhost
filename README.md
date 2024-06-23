@@ -1,5 +1,5 @@
-# SFTP-Dreamhost
-Github Action for pushing code to Dreamhost via SFTP.
+# SSH-Dreamhost
+Github Action for pushing code to Dreamhost via SSH.
 
 ## How to use
 ### STATIC

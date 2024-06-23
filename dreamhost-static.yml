@@ -15,13 +15,17 @@ jobs:
       - name: Install lftp
         run: sudo apt-get install lftp
 
-      - name: Deploy via SFTP
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
+
+      - name: Deploy via rsync
         env:
           USERNAME: ${{ secrets.USERNAME }}
-          PASSWORD: ${{ secrets.PASSWORD }}
           HOST: ${{ secrets.HOST }}
           DEPLOY_PATH: subdomain.domain.tld/ # Change this to your project path
         run: |
-          lftp -u $USERNAME,$PASSWORD sftp://$HOST -e "
-          set sftp:auto-confirm yes;
-          mirror --reverse --delete --verbose --exclude .git/ ./ $DEPLOY_PATH; quit"
+          rsync -avz --delete --exclude .git/ ./ $USERNAME@$HOST:$DEPLOY_PATH

@@ -9,3 +9,6 @@ Github Action for pushing code to Dreamhost via SSH.
 
 ### LARAVEL
 coming soon
+
+## Finding Known Hosts Entry
+To find the `Known Hosts Entry`, go to your Dreamhost Panel, on the left side of your screen, click the `more` tab and then go to `SSH Keys` and you will be able to find the Known Hosts entry there.

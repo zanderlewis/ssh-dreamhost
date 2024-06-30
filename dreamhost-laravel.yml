@@ -1,0 +1,46 @@
+name: Deploy Laravel to Dreamhost
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            composer-
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+
+      - name: Install composer dependencies
+        run: |
+          composer install --no-scripts
+
+      - name: Install NPM dependencies
+        run: npm install
+
+      - name: Compile assets
+        run: npm run build # Use npm run build for compiling assets
+
+      - name: Deploy via rsync and sshpass
+        env:
+          USERNAME: ${{ secrets.SFTP_USERNAME }}
+          PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+          HOST: ${{ secrets.SFTP_HOST }}
+          DEPLOY_PATH: postaverse.net/
+        run: |
+          sshpass -p "$PASSWORD" rsync -avz --exclude .env --exclude .git/ --exclude /node_modules/ --rsh="ssh -o StrictHostKeyChecking=no" . $USERNAME@$HOST:$DEPLOY_PATH
+          sshpass -p "$PASSWORD" ssh $USERNAME@$HOST "cd $DEPLOY_PATH && php artisan migrate --force && php artisan config:cache && php artisan route:cache && php artisan view:cache"

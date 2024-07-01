@@ -40,7 +40,7 @@ jobs:
           USERNAME: ${{ secrets.SFTP_USERNAME }}
           PASSWORD: ${{ secrets.SFTP_PASSWORD }}
           HOST: ${{ secrets.SFTP_HOST }}
-          DEPLOY_PATH: postaverse.net/
+          DEPLOY_PATH: subdomain.domain.tld/
         run: |
           sshpass -p "$PASSWORD" rsync -avz --exclude .env --exclude .git/ --exclude /node_modules/ --rsh="ssh -o StrictHostKeyChecking=no" . $USERNAME@$HOST:$DEPLOY_PATH
           sshpass -p "$PASSWORD" ssh $USERNAME@$HOST "cd $DEPLOY_PATH && php artisan migrate --force && php artisan config:cache && php artisan route:cache && php artisan view:cache"

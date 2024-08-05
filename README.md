@@ -13,7 +13,12 @@ File: [dreamhost-laravel.yml](dreamhost-laravel.yml)
 1. Use Steps 1 and 2 for the Static Guide.
 2. Configure your PHP version in the yml file.
 3. Make sure your Laravel `.env` file is already in Dreamhost.
-4. You are done! The action will take care of migrations and compiling th front-end!
+4. You are done! The action will take care of migrations and compiling the front-end!
+
+### PHP
+File: [dreamhost-php.yml](dreamhost-php.yml)
+1. Follow the steps for Laravel.
+2. You are done!
 
 ## Finding Known Hosts Entry
 To find the `Known Hosts Entry`, go to your Dreamhost Panel, on the left side of your screen, click the `more` tab and then go to `SSH Keys` and you will be able to find the Known Hosts entry there.
